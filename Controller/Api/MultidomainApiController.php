@@ -9,7 +9,7 @@ use MauticPlugin\MauticMultiDomainBundle\Entity\Multidomain;
 /**
  * Class MultidomainApiController.
  */
-class MultidomainApiController extends CommonApiController
+class MultiDomainApiController extends CommonApiController
 {
     /**
      * {@inheritdoc}

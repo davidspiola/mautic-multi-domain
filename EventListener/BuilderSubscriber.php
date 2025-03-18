@@ -31,11 +31,13 @@ use Mautic\PageBundle\Entity\Redirect;
 use Mautic\PageBundle\Entity\Trackable;
 use Mautic\PageBundle\Model\RedirectModel;
 use Mautic\PageBundle\Model\TrackableModel;
+use MauticPlugin\MauticMultiDomainBundle\Model\MultidomainModel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use MauticPlugin\MauticMultiDomainBundle\Model\MultidomainModel;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BuilderSubscriber implements EventSubscriberInterface
 {
@@ -150,6 +152,7 @@ class BuilderSubscriber implements EventSubscriberInterface
                 $senderEmail = $ownerEmail;
             }
         }
+
         if(empty($ownerEmail) && $email && $email->getFromAddress()){
             $senderEmail = $email->getFromAddress();
         }
@@ -164,7 +167,7 @@ class BuilderSubscriber implements EventSubscriberInterface
             }
 
         }
-        
+
         if (!$unsubscribeText) {
             $unsubscribeText = $this->translator->trans('mautic.email.unsubscribe.text', ['%link%' => '|URL|']);
         }

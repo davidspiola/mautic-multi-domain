@@ -2,18 +2,12 @@
 
 namespace MauticPlugin\MauticMultiDomainBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 use Mautic\ApiBundle\Serializer\Driver\ApiMetadataDriver;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Mautic\CategoryBundle\Entity\Category;
 use Mautic\CoreBundle\Doctrine\Mapping\ClassMetadataBuilder;
 use Mautic\CoreBundle\Entity\FormEntity;
-use Mautic\FormBundle\Entity\Form;
 
 /**
- * This class processes payment requests from Webpayment
  * Class Multidomain
  * @package MauticPlugin\MauticMultiDomainBundle\Entity
  */
@@ -35,66 +29,62 @@ class Multidomain extends FormEntity
      */
     private $domain;
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-
-        $metadata->addConstraint(new UniqueEntity([
-            'fields' => 'email',
-        ]));
-        $metadata->addPropertyConstraint(
-            'email',
-            new Assert\NotBlank(
-                [
-                    'message' => 'mautic.multidomain.email.required',
-                ]
-            )
-        );
-
-        $metadata->addPropertyConstraint(
-            'email',
-            new Assert\Email(
-                [
-                    'message' => 'mautic.multidomain.email.invalid',
-                ]
-            )
-        );
-
-        $metadata->addPropertyConstraint(
-            'domain',
-            new Assert\NotBlank(
-                ['message' => 'mautic.multidomain.domain.required']
-            )
-        );
-
-        $metadata->addPropertyConstraint(
-            'domain',
-            new Assert\Url(
-                ['message' => 'mautic.multidomain.domain.invalid']
-            )
-        );
-    }
-
     /**
-     * @param ORM\ClassMetadata $metadata
+     * @var string
      */
-    public static function loadMetadata (ORM\ClassMetadata $metadata)
+    private $name;
+
+//    public static function loadValidatorMetadata(ClassMetadata $metadata)
+//    {
+//
+//        $metadata->addConstraint(new UniqueEntity([
+//            'fields' => 'email',
+//        ]));
+//        $metadata->addPropertyConstraint(
+//            'email',
+//            new Assert\NotBlank(
+//                [
+//                    'message' => 'mautic.multidomain.email.required',
+//                ]
+//            )
+//        );
+//
+//        $metadata->addPropertyConstraint(
+//            'email',
+//            new Assert\Email(
+//                [
+//                    'message' => 'mautic.multidomain.email.invalid',
+//                ]
+//            )
+//        );
+//
+//        $metadata->addPropertyConstraint(
+//            'domain',
+//            new Assert\NotBlank(
+//                ['message' => 'mautic.multidomain.domain.required']
+//            )
+//        );
+//
+//        $metadata->addPropertyConstraint(
+//            'domain',
+//            new Assert\Url(
+//                ['message' => 'mautic.multidomain.domain.invalid']
+//            )
+//        );
+//    }
+
+    public static function loadMetadata(\Doctrine\ORM\Mapping\ClassMetadata $metadata): void
     {
         $builder = new ClassMetadataBuilder($metadata);
-
         $builder->setTable('multi_domain')
+            ->setEmbeddable()
             ->setCustomRepositoryClass(MultidomainRepository::class);
-
-        // Helper functions
         $builder->addId();
-        
-        $builder->createField('email', 'string')
-            ->columnName('email')
-            ->build();
+        //$builder->addField('name', Types::STRING);
+        $builder->addField('email', Types::STRING);
+        $builder->addField('domain', Types::STRING);
 
-        $builder->createField('domain', 'text')
-            ->columnName('domain')
-            ->build();
- 
+
     }
 
     /**
@@ -102,7 +92,7 @@ class Multidomain extends FormEntity
      *
      * @param $metadata
      */
-    public static function loadApiMetadata(ApiMetadataDriver $metadata)
+    public static function loadApiMetadata(ApiMetadataDriver $metadata): void
     {
         $metadata->setGroupPrefix('multidomain')
             ->addListProperties(
@@ -115,51 +105,54 @@ class Multidomain extends FormEntity
             ->build();
     }
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): Multidomain
+    public function setEmail(string $email): void
     {
         $this->email = $email;
-        return $this;
     }
 
-    public function getDomain(): ?string
+    public function getDomain(): string
     {
         return $this->domain;
     }
 
-    public function setDomain(string $text): Multidomain
+    public function setDomain(string $domain): void
     {
-        $this->domain = $text;
-        return $this;
+        $this->domain = $domain;
     }
 
-    /**
-     * Get Fake name to be compatable with getName of commonEntity. 
-     */
-    public function getName()
+    public function getName(): ?string
     {
-        return $this->email;
+        return $this->domain;
     }
 
-    /**
-     * Set Fake name to be compatable with getName of commonEntity. 
-     * 
-     */
-    public function setName(string $email): Multidomain
+    public function setName(string $name): void
     {
-        $this->email = $email;
-        return $this;
+        $this->domain = $name;
     }
+
+    public function getDescription(): String
+    {
+        return "";
+    }
+
+    public function getCategory(): String
+    {
+        return "";
+    }
+
 }

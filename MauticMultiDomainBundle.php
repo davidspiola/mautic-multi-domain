@@ -2,14 +2,14 @@
 
 namespace MauticPlugin\MauticMultiDomainBundle;
 
-use Mautic\PluginBundle\Bundle\PluginBundleBase;
+use Mautic\IntegrationsBundle\Bundle\AbstractPluginBundle;
 use Mautic\CoreBundle\Factory\MauticFactory;
 use Mautic\PluginBundle\Entity\Plugin;
 
 /**
  * Class MauticMultiDomainBundle.
  */
-class MauticMultiDomainBundle extends PluginBundleBase
+class MauticMultiDomainBundle extends AbstractPluginBundle
 {
     public static function onPluginInstall(Plugin $plugin, MauticFactory $factory, $metadata = null, $installedSchema = null)
     {

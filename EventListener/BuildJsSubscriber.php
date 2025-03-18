@@ -4,7 +4,7 @@ namespace MauticPlugin\MauticMultiDomainBundle\EventListener;
 
 use Mautic\CoreBundle\CoreEvents;
 use Mautic\CoreBundle\Event\BuildJsEvent;
-use Mautic\CoreBundle\Templating\Helper\AssetsHelper;
+use Mautic\CoreBundle\Twig\Helper\AssetsHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -40,7 +40,7 @@ class BuildJsSubscriber implements EventSubscriberInterface
     /**
      * @return array
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             CoreEvents::BUILD_MAUTIC_JS => [
@@ -49,7 +49,7 @@ class BuildJsSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onBuildJs(BuildJsEvent $event)
+    public function onBuildJs(BuildJsEvent $event): void
     {
         // PageBundle -> $pageTrackingUrl, $pageTrackingCORSUrl, $contactIdUrl
         $context = $this->router->getContext();

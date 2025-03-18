@@ -9,22 +9,20 @@
  * @license     GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 
-namespace MauticPlugin\MauticMultiDomainBundle\Security\Permissions;
+namespace MauticPlugin\MauticMultiDomainBundle\Permissions\Security;
 
-use Mautic\CoreBundle\Security\Permissions\AbstractPermissions;
 use Symfony\Component\Form\FormBuilderInterface;
+use Mautic\CoreBundle\Security\Permissions\AbstractPermissions;
 
 /**
  * Class MauticFocusPermissions.
  */
-class MultidomainPermissions extends AbstractPermissions
+class MultiDomainPermissions extends AbstractPermissions
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct($params)
+    public function __construct( array $params = [])
     {
         parent::__construct($params);
+
         $this->addStandardPermissions('categories');
         $this->addExtendedPermissions('items');
     }
@@ -39,10 +37,7 @@ class MultidomainPermissions extends AbstractPermissions
         return 'multiDomain';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface &$builder, array $options, array $data)
+    public function buildForm(FormBuilderInterface &$builder, array $options, array $data): void
     {
         $this->addStandardFormFields('multiDomain', 'categories', $builder, $data);
         $this->addExtendedFormFields('multiDomain', 'items', $builder, $data);
